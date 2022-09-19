@@ -1,0 +1,1600 @@
+(function($) {
+    "use strict";
+    var isMobile = {
+        Android: function() {
+            return navigator.userAgent.match(/Android/i);
+        },
+        BlackBerry: function() {
+            return navigator.userAgent.match(/BlackBerry/i);
+        },
+        iOS: function() {
+            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+        },
+        Opera: function() {
+            return navigator.userAgent.match(/Opera Mini/i);
+        },
+        Windows: function() {
+            return navigator.userAgent.match(/IEMobile/i);
+        },
+        any: function() {
+            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+        }
+    }
+	var noty = function(type, message) {
+        return new Noty({
+            type: type,
+            layout: 'topRight',
+            theme: 'mint',
+            progressBar: true,
+            text: message,
+            timeout: 2000,
+            animation: {
+                open: 'animated bounceInRight',
+                close: 'animated bounceOutRight'
+            }
+        }).show();
+    };
+    var rating = function() {
+        $('select.ps-rating').barrating({
+            theme: 'fontawesome-stars',
+            emptyValue: '0'
+        });
+    };
+    var share_post = function() {
+        $('.shared, .ps-post__social').on('click', 'a', function() {
+            var element = $(this),
+                type = $(this).data('type'),
+                message = $(this)
+                    .closest('ul')
+                    .data('title'),
+                url = $(this)
+                    .closest('ul')
+                    .data('url'),
+                share_url = '';
+
+            if (typeof type === 'undefined' || !type || type == null) {
+                type = $(this).data('type');
+            }
+            if (typeof message === 'undefined' || !message || message == null) {
+                message = $(this).data('title');
+            }
+            if (typeof url === 'undefined' || !url || url == null) {
+                url = $(this).data('url');
+            }
+
+            switch (type) {
+                case 'facebook':
+                    share_url +=
+                        'http://www.facebook.com/sharer.php?u=' +
+                        url +
+                        '&t=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'google':
+                    share_url +=
+                        'https://plus.google.com/share?url=' +
+                        encodeURIComponent(message + ' ' + url);
+                    break;
+                case 'twitter':
+                    share_url +=
+                        'https://twitter.com/home/?status=' +
+                        encodeURIComponent(message + ' ' + url);
+                    break;
+                case 'reddit':
+                    share_url +=
+                        'http://reddit.com/submit?url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'linkedin':
+                    share_url +=
+                        'http://linkedin.com/shareArticle?mini=true&url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'tumblr':
+                    share_url +=
+                        'http://www.tumblr.com/share/link?url=' +
+                        url +
+                        '&name=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'pinterest':
+                    share_url +=
+                        'http://pinterest.com/pin/create/button/?url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'vk':
+                    share_url +=
+                        'http://vkontakte.ru/share.php?url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'instagram':
+                    share_url +=
+                        'http://vkontakte.ru/share.php?url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                default:
+                    share_url +=
+                        'mailto:?subject=' + message + '&body=' + url + '';
+                    break;
+            }
+
+            window.open(share_url, '_blank');
+
+            return false;
+        });
+    };
+	
+	var share_product = function() {
+        $('.ps-product__sharing').on('click', 'a', function() {
+            var element = $(this),
+                type = $(this).data('type'),
+                message = $(this)
+                    .closest('p')
+                    .data('title'),
+                url = $(this)
+                    .closest('p')
+                    .data('url'),
+                share_url = '';
+
+            if (typeof type === 'undefined' || !type || type == null) {
+                type = $(this).data('type');
+            }
+            if (typeof message === 'undefined' || !message || message == null) {
+                message = $(this).data('title');
+            }
+            if (typeof url === 'undefined' || !url || url == null) {
+                url = $(this).data('url');
+            }
+
+            switch (type) {
+                case 'facebook':
+                    share_url +=
+                        'http://www.facebook.com/sharer.php?u=' +
+                        url +
+                        '&t=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'google':
+                    share_url +=
+                        'https://plus.google.com/share?url=' +
+                        encodeURIComponent(message + ' ' + url);
+                    break;
+                case 'twitter':
+                    share_url +=
+                        'https://twitter.com/home/?status=' +
+                        encodeURIComponent(message + ' ' + url);
+                    break;
+                case 'reddit':
+                    share_url +=
+                        'http://reddit.com/submit?url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'linkedin':
+                    share_url +=
+                        'http://linkedin.com/shareArticle?mini=true&url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'tumblr':
+                    share_url +=
+                        'http://www.tumblr.com/share/link?url=' +
+                        url +
+                        '&name=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'pinterest':
+                    share_url +=
+                        'http://pinterest.com/pin/create/button/?url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'vk':
+                    share_url +=
+                        'http://vkontakte.ru/share.php?url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'instagram':
+                    share_url +=
+                        'http://vkontakte.ru/share.php?url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                default:
+                    share_url +=
+                        'mailto:?subject=' + message + '&body=' + url + '';
+                    break;
+            }
+
+            window.open(share_url, '_blank');
+
+            return false;
+        });
+    };
+
+    var post_like = function() {
+        if ($('.ps-post__meta .post-like').length > 0) {
+            $('body').on('click', '.ps-post__meta .post-like', function() {
+                var button = $(this),
+                    wrap = $(this).closest('.ps-post__action'),
+                    data = {
+                        post_id: button.data('id'),
+                        security: noubready_theme_params.ajax_nonce,
+                        action: 'bready_helpers_post_like'
+                    };
+
+                if (button.data('id') != '') {
+                    $.ajax({
+                        type: 'POST',
+                        data: data,
+                        url: noubready_theme_params.ajax_url,
+                        success: function(data) {
+                            button.remove();
+                            wrap.append(data.button);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            alert(
+                                jqXHR +
+                                    ' :: ' +
+                                    textStatus +
+                                    ' :: ' +
+                                    errorThrown
+                            );
+                        }
+                    });
+                }
+
+                return false;
+            });
+        }
+    };
+	
+	var remove_cart_header = function() {
+        if ($('#noubready_mini_cart').length > 0) {
+            $('body').on(
+                'click',
+                '.ps-cart-item .ps-cart-item__close',
+                function() {
+                    var btn = $(this),
+                        data = {
+                            product_id: $(this).data('product_id'),
+                            cart_item_key: $(this).data('key'),
+                            nonce: noubready_theme_params.ajax_nonce,
+                            action: 'noubready_remove_product_from_cart'
+                        };
+                    $.ajax({
+                        type: 'POST',
+                        data: data,
+                        url: noubready_theme_params.ajax_url,
+                        success: function(data) {
+                            if (data.status == '1') {
+                                $('#noubready_mini_cart').html(data.html);
+                                noty(
+                                    'success',
+                                    noubready_theme_params.remove_from_cart_text
+                                );
+                            }
+                        }
+                    });
+
+                    return false;
+                }
+            );
+        }
+    };
+    var magnificPopup = function() {
+        $('.popup-youtube').magnificPopup({
+            disableOn: 700,
+            type: 'iframe',
+            mainClass: 'mfp-fade',
+            removalDelay: 160,
+            preloader: false,
+            fixedContentPos: false
+        });
+
+        if ($('#subscribe').length > 0) {
+            var isshow = localStorage.getItem('subscribe_isshow');
+            if (isshow == null) {
+                localStorage.setItem('subscribe_isshow', 1);
+
+                // Show popup here
+                setTimeout(function() {
+                    $.magnificPopup.open(
+                        {
+                            items: {
+                                src: '#subscribe'
+                            },
+                            type: 'inline',
+                            modal: true
+                        },
+                        0
+                    );
+                }, noubready_theme_params.subscribe_popup_delay);
+            }
+
+            $(document).on('click', '.ps-popup__close', function(e) {
+                e.preventDefault();
+                localStorage.setItem('subscribe_isshow', 1);
+                $.magnificPopup.close();
+            });
+        } else {
+            $(document).on('click', '.ps-popup__close', function(e) {
+                e.preventDefault();
+                $.magnificPopup.close();
+            });
+        }
+    };
+
+    var share_product = function() {
+        $('.ps-product__sharing').on('click', 'a', function() {
+            var element = $(this),
+                type = $(this).data('type'),
+                message = $(this)
+                    .closest('p')
+                    .data('title'),
+                url = $(this)
+                    .closest('p')
+                    .data('url'),
+                share_url = '';
+
+            if (typeof type === 'undefined' || !type || type == null) {
+                type = $(this).data('type');
+            }
+            if (typeof message === 'undefined' || !message || message == null) {
+                message = $(this).data('title');
+            }
+            if (typeof url === 'undefined' || !url || url == null) {
+                url = $(this).data('url');
+            }
+
+            switch (type) {
+                case 'facebook':
+                    share_url +=
+                        'http://www.facebook.com/sharer.php?u=' +
+                        url +
+                        '&t=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'google':
+                    share_url +=
+                        'https://plus.google.com/share?url=' +
+                        encodeURIComponent(message + ' ' + url);
+                    break;
+                case 'twitter':
+                    share_url +=
+                        'https://twitter.com/home/?status=' +
+                        encodeURIComponent(message + ' ' + url);
+                    break;
+                case 'reddit':
+                    share_url +=
+                        'http://reddit.com/submit?url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'linkedin':
+                    share_url +=
+                        'http://linkedin.com/shareArticle?mini=true&url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'tumblr':
+                    share_url +=
+                        'http://www.tumblr.com/share/link?url=' +
+                        url +
+                        '&name=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'pinterest':
+                    share_url +=
+                        'http://pinterest.com/pin/create/button/?url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'vk':
+                    share_url +=
+                        'http://vkontakte.ru/share.php?url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                case 'instagram':
+                    share_url +=
+                        'http://vkontakte.ru/share.php?url=' +
+                        url +
+                        '&title=' +
+                        encodeURIComponent(message);
+                    break;
+                default:
+                    share_url +=
+                        'mailto:?subject=' + message + '&body=' + url + '';
+                    break;
+            }
+
+            window.open(share_url, '_blank');
+
+            return false;
+        });
+    };
+	
+	var is_email = function(email) {
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return regex.test(email);
+    };
+    var contact = function() {
+        $('.ps-form--contact button').on('click', function() {
+            var $this = $(this),
+                form = $(this).closest('form'),
+                name = $('input[name="name"]').val(),
+                email = $('input[name="email"]').val(),
+                content = $('textarea[name="content"]').val(),
+                submit = true;
+
+            if (name == '' || email == '' || content == '') {
+                form.find('.form-control').each(function() {
+                    var val = $(this).val();
+                    if (val == '') {
+                        $(this)
+                            .closest('.form-group')
+                            .addClass('has-error');
+                    } else {
+                        $(this)
+                            .closest('.form-group')
+                            .removeClass('has-error');
+                    }
+                });
+                submit = false;
+                noty('error', noubready_theme_params.required_text);
+                return false;
+            }
+
+            if (!is_email(email)) {
+                noty('error', noubready_theme_params.email_invalid_text);
+                submit = false;
+                return false;
+            }
+
+            if (submit) {
+                var data = {
+                    action: 'bready_helpers_email_contact',
+                    nonce: noubready_theme_params.ajax_nonce,
+                    name: name,
+                    email: email,
+                    content: content
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: noubready_theme_params.ajax_url,
+                    data: data,
+                    beforeSend: function() {
+                        $this.html(
+                            noubready_theme_params.btn_contact_text +
+                                ' <i class="fa fa-spin fa-spinner" aria-hidden="true"></i>'
+                        );
+                    },
+                    success: function(data) {
+                        form.trigger('reset');
+                        $this.html(
+                            noubready_theme_params.btn_contact_text +
+                                ' <i class="ps-icon-next"></i>'
+                        );
+                        if (data.status == 1) {
+                            noty(
+                                'success',
+                                noubready_theme_params.send_email_success_text
+                            );
+                        } else {
+                            noty(
+                                'error',
+                                noubready_theme_params.send_email_fail_text
+                            );
+                        }
+                    }
+                });
+            }
+            return false;
+        });
+    };
+    var newsletter = function() {
+        if ($('.ps-form--subscribe').length > 0) {
+            $('.ps-form--subscribe').on('click', 'button', function() {
+                var val = $('.ps-form--subscribe input').val(),
+                    submit = true;
+
+                if (val == '') {
+                    noty('error', noubready_theme_params.required_text);
+                    submit = false;
+                    $('.ps-form--subscribe').addClass('has-error');
+                    return false;
+                }
+
+                if (!is_email(val)) {
+                    noty('error', noubready_theme_params.email_invalid_text);
+                    submit = false;
+                    $('.ps-form--subscribe').addClass('has-error');
+                    return false;
+                }
+
+                if (submit) {
+                    $('.ps-form--subscribe').submit();
+                }
+            });
+        }
+    };
+	var newsletter = function() {
+        if ($('.ps-form--subscribe-popup').length > 0) {
+            $('.ps-form--subscribe-popup').on('click', 'button', function() {
+                var val = $('.ps-form--subscribe-popup input').val(),
+                    submit = true;
+
+                if (val == '') {
+                    noty('error', noubready_theme_params.required_text);
+                    submit = false;
+                    $('.ps-form--subscribe-popup').addClass('has-error');
+                    return false;
+                }
+
+                if (!is_email(val)) {
+                    noty('error', noubready_theme_params.email_invalid_text);
+                    submit = false;
+                    $('.ps-form--subscribe-popup').addClass('has-error');
+                    return false;
+                }
+
+                if (submit) {
+                    $('.ps-form--subscribe-popup').submit();
+                }
+            });
+        }
+    };
+	
+	var newsletter_footer = function() {
+        if ($('.ps-form--subscribe-offer').length > 0) {
+            $('.ps-form--subscribe-offer').on('click', 'button', function() {
+                var val = $('.ps-form--subscribe-offer input').val(),
+                    submit = true;
+
+                if (val == '') {
+                    noty('error', noubready_theme_params.required_text);
+                    submit = false;
+                    $('.ps-form--subscribe-offer').addClass('has-error');
+                    return false;
+                }
+
+                if (!is_email(val)) {
+                    noty('error', noubready_theme_params.email_invalid_text);
+                    submit = false;
+                    $('.ps-form--subscribe-offer').addClass('has-error');
+                    return false;
+                }
+
+                if (submit) {
+                    $('.ps-form--subscribe-offer').submit();
+                }
+            });
+        }
+    };
+	
+	var delivery = function() {
+        $('.ps-form--delivery button').on('click', function() {
+            var $this = $(this),
+                form = $(this).closest('form'),
+                name = $('input[name="name"]').val(),
+                email = $('input[name="email"]').val(),
+                phone = $('input[name="phone"]').val(),
+                submit = true;
+
+            if (name == '' || email == '' || phone == '') {
+                form.find('.form-control').each(function() {
+                    var val = $(this).val();
+                    if (val == '') {
+                        $(this)
+                            .closest('.form-group')
+                            .addClass('has-error');
+                    } else {
+                        $(this)
+                            .closest('.form-group')
+                            .removeClass('has-error');
+                    }
+                });
+                submit = false;
+                noty('error', noubready_theme_params.required_text);
+                return false;
+            }
+
+            if (!is_email(email)) {
+                noty('error', noubready_theme_params.email_invalid_text);
+                submit = false;
+                return false;
+            }
+
+            if (submit) {
+                var data = {
+                    action: 'bready_helpers_email_contact',
+                    nonce: noubready_theme_params.ajax_nonce,
+                    name: name,
+                    email: email,
+                    phone: phone
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: noubready_theme_params.ajax_url,
+                    data: data,
+                    beforeSend: function() {
+                        $this.html(
+                            noubready_theme_params.btn_delivery_text +
+                                ' <i class="fa fa-spin fa-spinner" aria-hidden="true"></i>'
+                        );
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        form.trigger('reset');
+                        $this.html(
+                            noubready_theme_params.btn_contact_text +
+                                ' <i class="ps-icon-next"></i>'
+                        );
+                        if (data.status == 1) {
+                            noty(
+                                'success',
+                                noubready_theme_params.send_email_success_text
+                            );
+                        } else {
+                            noty(
+                                'error',
+                                noubready_theme_params.send_email_fail_text
+                            );
+                        }
+                    }
+                });
+            }
+            return false;
+        });
+    };
+	
+	var get_in_touch = function() {
+        $('.ps-form--get-in-touch button').on('click', function() {
+            var $this = $(this),
+                form = $(this).closest('form'),
+                name = $('input[name="name"]').val(),
+                email = $('input[name="email"]').val(),
+                phone = $('input[name="phone"]').val(),
+                submit = true;
+
+            if (name == '' || email == '' || phone == '') {
+                form.find('.form-control').each(function() {
+                    var val = $(this).val();
+                    if (val == '') {
+                        $(this)
+                            .closest('.form-group')
+                            .addClass('has-error');
+                    } else {
+                        $(this)
+                            .closest('.form-group')
+                            .removeClass('has-error');
+                    }
+                });
+                submit = false;
+                noty('error', noubready_theme_params.required_text);
+                return false;
+            }
+
+            if (!is_email(email)) {
+                noty('error', noubready_theme_params.email_invalid_text);
+                submit = false;
+                return false;
+            }
+
+            if (submit) {
+                var data = {
+                    action: 'bready_helpers_email_contact',
+                    nonce: noubready_theme_params.ajax_nonce,
+                    name: name,
+                    email: email,
+                    phone: phone
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: noubready_theme_params.ajax_url,
+                    data: data,
+                    beforeSend: function() {
+                        $this.html(
+                            noubready_theme_params.btn_get_touch_text +
+                                ' <i class="fa fa-spin fa-spinner" aria-hidden="true"></i>'
+                        );
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        form.trigger('reset');
+                        $this.html(
+                            noubready_theme_params.btn_contact_text +
+                                ' <i class="ps-icon-next"></i>'
+                        );
+                        if (data.status == 1) {
+                            noty(
+                                'success',
+                                noubready_theme_params.send_email_success_text
+                            );
+                        } else {
+                            noty(
+                                'error',
+                                noubready_theme_params.send_email_fail_text
+                            );
+                        }
+                    }
+                });
+            }
+            return false;
+        });
+    };
+	
+    function found_variation() {
+        $('body').on('found_variation', function(e, variation) {
+            console.log(variation);
+            if (variation.price_html != '') {
+                $('.price-for-default').hide();
+                $('.price-for-varian')
+                    .html(variation.price_html)
+                    .show();
+            } else {
+                $('.price-for-default').show();
+                $('.price-for-varian').hide();
+            }
+
+            if (variation.variation_description != '') {
+                $('.desc-for-default').hide();
+                $('.desc-for-varian')
+                    .html(variation.variation_description)
+                    .show();
+            } else {
+                $('.desc-for-default').show();
+                $('.desc-for-varian').hide();
+            }
+        });
+    }
+
+	var product_wishlist = function() {
+        if ($('.product a.wishlist').length > 0) {
+            $('body').on('click', '.product a.wishlist', function() {
+                var do_action = 'add',
+                    message = '';
+
+                if ($(this).hasClass('delete-wishlist')) {
+                    do_action = 'delete';
+                }
+
+                var button = $(this),
+                    product = $(this).closest('.product'),
+                    title = product.data('title'),
+                    url = product.data('url'),
+                    data = {
+                        product_id: button.data('product_id'),
+                        nonce: noubready_theme_params.ajax_nonce,
+                        action: 'bready_helpers_wishlist',
+                        do_action: do_action
+                    };
+                if (button.hasClass('added')) {
+                    window.location.href =
+                        noubready_theme_params.wishlist_page_url;
+                    return false;
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    data: data,
+                    url: noubready_theme_params.ajax_url,
+                    success: function(data) {
+                        message =
+                            '"<a href="' +
+                            url +
+                            '"><strong>' +
+                            title +
+                            '</strong></a>" ' +
+                            data.html;
+                        if (button.hasClass('delete-wishlist')) {
+                            product.remove();
+                            if (data.status == '1') {
+                                noty('success', message);
+                            } else {
+                                noty('error', message);
+                            }
+                        } else {
+                            button.addClass('added');
+                            if (data.status == '1') {
+                                button.html(
+                                    '<i class="fa fa-check" aria-hidden="true"></i>'
+                                );
+                                noty('success', message);
+                            } else {
+                                noty('error', message);
+                            }
+                            setTimeout(function() {
+                                button.html('<i class="fa fa-check"></i>');
+                            }, 3000);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        noty('error', noubready_theme_params.error_text);
+                    }
+                });
+
+                return false;
+            });
+        }
+    };
+
+    var product_compare = function() {
+        if ($('.product a.compare').length > 0) {
+            $('body').on('click', '.product a.compare', function() {
+                var do_action = 'add',
+                    message = '';
+
+                if ($(this).hasClass('delete-compare')) {
+                    do_action = 'delete';
+                }
+
+                var button = $(this),
+                    product = $(this).closest('.product'),
+                    title = product.data('title'),
+                    url = product.data('url'),
+                    data = {
+                        product_id: button.data('product_id'),
+                        nonce: noubready_theme_params.ajax_nonce,
+                        action: 'bready_helpers_compare',
+                        do_action: do_action
+                    };
+
+                if (button.hasClass('added')) {
+                    window.location.href =
+                        noubready_theme_params.compare_page_url;
+                    return false;
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    data: data,
+                    url: noubready_theme_params.ajax_url,
+                    success: function(data) {
+                        button.addClass('added');
+                        message =
+                            '"<a href="' +
+                            url +
+                            '"><strong>' +
+                            title +
+                            '</strong></a>" ' +
+                            data.html;
+
+                        if (button.hasClass('delete-compare')) {
+                            if (data.status == '1') {
+                                product.remove();
+                                noty('success', message);
+                            } else {
+                                noty('error', message);
+                            }
+                        } else {
+                            if (data.status == '1') {
+                                button.html(
+                                    '<i class="fa fa-check" aria-hidden="true"></i>'
+                                );
+                                noty('success', message);
+                            } else {
+                                noty('error', message);
+                            }
+                            setTimeout(function() {
+                                button.html('<i class="fa fa-check"></i>');
+                            }, 3000);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        noty('error', noubready_theme_params.error_text);
+                    }
+                });
+
+                return false;
+            });
+        }
+    };
+
+    function inputNumberChange() {
+        var number = $('.ps-number');
+        number.each(function() {
+            var el = $(this),
+                numberValue = el.find('input').val();
+            el.find('.up').on('click', function(e) {
+                e.preventDefault();
+                numberValue++;
+                el.find('input').val(numberValue);
+                el.find('input').attr('value', numberValue);
+            });
+            el.find('.down').on('click', function(e) {
+                e.preventDefault();
+                if (numberValue > 1) {
+                    numberValue--;
+                    el.find('input').val(numberValue);
+                    el.find('input').attr('value', numberValue);
+                }
+            });
+        });
+        $('.form-group--number').each(function() {
+            var el = $(this),
+                numberValue = el.find('input').val();
+            el.find('.plus').on('click', function(e) {
+                e.preventDefault();
+                numberValue++;
+                el.find('input').val(numberValue);
+                el.find('input').attr('value', numberValue);
+            });
+            el.find('.minus').on('click', function(e) {
+                e.preventDefault();
+                if (numberValue > 1) {
+                    numberValue--;
+                    el.find('input').val(numberValue);
+                    el.find('input').attr('value', numberValue);
+                }
+            });
+        });
+    }
+	
+	var custom_content = function() {
+        if ($('.post-password-form').length > 0) {
+            $('.post-password-form').addClass('form-inline');
+            $('.post-password-form input[name="post_password"]').addClass(
+                'form-control'
+            );
+            $('.post-password-form input[type="submit"]').addClass('ps-btn');
+        }
+
+        $('.menu li.menu-item-has-children').addClass('dropdown');
+        if ($('.mega-sub-menu').length > 0) {
+            $('.mega-sub-menu').addClass('sub-menu');
+        }
+        $('.widget select').addClass('form-control');
+        $('.widget_nav_menu ul').removeClass('menu');
+        $('.widget_nav_menu ul.sub-menu').addClass('children');
+        $('.widget_nav_menu ul').removeClass('sub-menu');
+
+        if ($('.widget').length > 0) {
+            $('.widget ul').wrap('<div class="ps-widget__content"></div');
+            $('.widget').each(function() {
+                if (!$(this).hasClass('widget_tag_cloud')) {
+                    $(this).addClass('widget_category');
+                    $(this)
+                        .find('ul')
+                        .addClass('ps-list--arrow');
+                }
+                if ($(this).hasClass('widget_tag_cloud')) {
+                    $(this).removeClass('widget_tag_cloud');
+                    $(this).removeClass('widget_category');
+                    $(this).addClass('widget_tags');
+                }
+            });
+        }
+
+        $('.ps-widget--footer ul').removeClass('ps-list--arrow');
+
+        $('.ps-comments .comment').each(function(i) {
+            var child = $(this).find('.ps-comment--reply');
+            if (child.length > 0) {
+                $(this).addClass('comment-has-child');
+            }
+        });
+        $('.ps-product__block').each(function() {
+            if ($(this).hasClass('ps-product__pa_color')) {
+                $(this).removeClass('ps-product__pa_color');
+                $(this).addClass('ps-product__style');
+            }
+            if ($(this).hasClass('ps-product__pa_size')) {
+                $(this).removeClass('ps-product__pa_size');
+                $(this).addClass('ps-product__size');
+            }
+        });
+        //ps-form--product-review
+        $('#respond').each(function(i) {
+            if ($(this).hasClass('comment-respond')) {
+                $(this).removeClass('comment-respond');
+                $(this).addClass('ps-form--product-review');
+            }
+        });
+
+        $('ul.ps-list--checked').removeClass('ps-list--arrow');
+        $('ul.product-categories').removeClass('ps-list--arrow');
+        $('ul.product-categories').addClass('ps-list--checked');
+        $('ul.ps-list--color').removeClass('ps-list--arrow');
+        $('.widget_tag_cloud ul').addClass('ps-tags');
+        $('.widget_price_filter button').addClass('ps-btn');
+        $('.widget_price_filter form').wrap(
+            '<div class="ps-widget__content"></div>'
+        );
+
+        $('[data-color]').each(function() {
+            let ignore = false;
+            try {
+                if($(this).attr('id') !== undefined){
+                    if($(this).attr('id').startsWith('slider-')){
+                        ignore = true;
+                    }
+                }
+            }
+            catch(err) {}
+
+            if ($(this).attr('data-color') && !ignore) {
+                var color = $(this).attr('data-color');
+                $(this).css({
+                    'background-color': '' + color + ''
+                });
+            }
+        });
+		
+		if ($('.variable-items-wrapper').hasClass('image-variable-wrapper')) {
+			$('.variations_form .variations').addClass('image-variable');
+		}else{
+			$('.variations_form .variations').removeClass('image-variable');
+		}
+		if ($('.variable-items-wrapper').hasClass('button-variable-wrapper')) {
+			$('.variations_form .variations').addClass('button-variable');
+		}else{
+			$('.variations_form .variations').removeClass('button-variable');
+		}
+    };
+	var mapConfig = function() {
+        var map = $('#contact-map'),
+            stylers = [
+                {
+                    featureType: 'landscape',
+                    stylers: [
+                        {
+                            hue: '#FFBB00'
+                        },
+                        {
+                            saturation: 43.400000000000006
+                        },
+                        {
+                            lightness: 37.599999999999994
+                        },
+                        {
+                            gamma: 1
+                        }
+                    ]
+                },
+                {
+                    featureType: 'road.highway',
+                    stylers: [
+                        {
+                            hue: '#ffa927'
+                        },
+                        {
+                            saturation: -61.8
+                        },
+                        {
+                            lightness: 45.599999999999994
+                        },
+                        {
+                            gamma: 1
+                        }
+                    ]
+                },
+                {
+                    featureType: 'road.arterial',
+                    stylers: [
+                        {
+                            hue: '#ffa927'
+                        },
+                        {
+                            saturation: -100
+                        },
+                        {
+                            lightness: 51.19999999999999
+                        },
+                        {
+                            gamma: 1
+                        }
+                    ]
+                },
+                {
+                    featureType: 'road.local',
+                    stylers: [
+                        {
+                            hue: '#ffa927'
+                        },
+                        {
+                            saturation: -100
+                        },
+                        {
+                            lightness: 52
+                        },
+                        {
+                            gamma: 1
+                        }
+                    ]
+                },
+                {
+                    featureType: 'water',
+                    stylers: [
+                        {
+                            hue: '#0078FF'
+                        },
+                        {
+                            saturation: -13.200000000000003
+                        },
+                        {
+                            lightness: 2.4000000000000057
+                        },
+                        {
+                            gamma: 1
+                        }
+                    ]
+                },
+                {
+                    featureType: 'poi',
+                    stylers: [
+                        {
+                            hue: '#00FF6A'
+                        },
+                        {
+                            saturation: -1.0989010989011234
+                        },
+                        {
+                            lightness: 11.200000000000017
+                        },
+                        {
+                            gamma: 1
+                        }
+                    ]
+                }
+            ];
+        map.lazyLoadGoogleMaps({
+            key: noubready_theme_params.map_api,
+            libraries: 'places',
+            region: 'GB',
+            callback: function(container, map) {
+                var id_map = $('#contact-map'),
+                    map_zoom_control = false;
+
+                if (id_map.length) {
+                    var icon_url = noubready_theme_params.map_marker;
+                    var address = id_map.data('address');
+                    var type = id_map.data('type');
+
+                    if (type == 'coordinates') {
+                        var lat = id_map.data('lat');
+                        var lng = id_map.data('lng');
+                        var latlng = new google.maps.LatLng(lat, lng);
+                        /* Map Option */
+                        var mapOptions = {
+                            zoom: id_map.data('zoom'),
+                            center: latlng,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP,
+                            scrollwheel: map_zoom_control,
+                            draggable: map_zoom_control,
+                            panControl: map_zoom_control,
+                            zoomControl: map_zoom_control,
+                            mapTypeControl: map_zoom_control,
+                            scaleControl: map_zoom_control,
+                            streetViewControl: false,
+                            overviewMapControl: false,
+                            zoomControlOptions: {
+                                style: google.maps.ZoomControlStyle.SMALL
+                            }
+                        };
+
+                        /* Create Map*/
+                        var map = new google.maps.Map(
+                            document.getElementById('contact-map'),
+                            mapOptions
+                        );
+
+                        if (icon_url == '') {
+                            var marker_options = {
+                                position: latlng,
+                                map: map,
+                                title: id_map.data('address'),
+                                draggable: false
+                            };
+                        } else {
+                            var marker_options = {
+                                position: latlng,
+                                map: map,
+                                title: id_map.data('address'),
+                                draggable: false,
+                                icon: { url: icon_url },
+                                animation: google.maps.Animation.BOUNCE
+                            };
+                        }
+                        var infowindow = new google.maps.InfoWindow({
+                            content: ''
+                        });
+                        var marker = new google.maps.Marker(marker_options);
+                        marker.addListener('click', function() {
+                            infowindow.open(map, marker);
+                            infowindow.setContent(id_map.data('address'));
+                        });
+                    } else {
+                        var geocoder = new google.maps.Geocoder();
+
+                        geocoder.geocode({ address: address }, function(
+                            results,
+                            status
+                        ) {
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                var lat = results[0].geometry.location.lat();
+                                var lng = results[0].geometry.location.lng();
+                            } else {
+                                var lat = '39.0928745';
+                                var lng = '-94.5763632';
+                            }
+
+                            var latlng = new google.maps.LatLng(lat, lng);
+
+                            /* Map Option */
+                            var mapOptions = {
+                                zoom: id_map.data('zoom'),
+                                center: latlng,
+                                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                                scrollwheel: map_zoom_control,
+                                draggable: map_zoom_control,
+                                panControl: map_zoom_control,
+                                zoomControl: map_zoom_control,
+                                mapTypeControl: map_zoom_control,
+                                scaleControl: map_zoom_control,
+                                streetViewControl: false,
+                                overviewMapControl: false,
+                                zoomControlOptions: {
+                                    style: google.maps.ZoomControlStyle.SMALL
+                                }
+                            };
+
+                            /* Create Map*/
+                            var map = new google.maps.Map(
+                                document.getElementById('contact-map'),
+                                mapOptions
+                            );
+
+                            if (icon_url == '') {
+                                var marker_options = {
+                                    position: latlng,
+                                    map: map,
+                                    title: id_map.data('address'),
+                                    draggable: false
+                                };
+                            } else {
+                                var marker_options = {
+                                    position: latlng,
+                                    map: map,
+                                    title: id_map.data('address'),
+                                    draggable: false,
+                                    icon: { url: icon_url },
+                                    animation: google.maps.Animation.BOUNCE
+                                };
+                            }
+                            var infowindow = new google.maps.InfoWindow({
+                                content: ''
+                            });
+                            var marker = new google.maps.Marker(marker_options);
+                            marker.addListener('click', function() {
+                                infowindow.open(map, marker);
+                                infowindow.setContent(id_map.data('address'));
+                            });
+                        });
+                    }
+                }
+            }
+        });
+    }
+	
+	var product_added_to_cart = function() {
+        $('body').on('added_to_cart', function(
+            e,
+            fragments,
+            cart_hash,
+            button
+        ) {
+			e.stopPropagation();
+            var product = $(button).closest('.product'),
+                title = product.data('title'),
+                url = product.data('url'),
+                message =
+                    '"<a href="' +
+                    url +
+                    '"><strong>' +
+                    title +
+                    '</strong></a>" ' +
+                    noubready_theme_params.added_to_cart_text;
+
+            if ($(button).hasClass('remove-after-added')) {
+                var product_id = $(button).data('product_id'),
+                    type = $(button).data('type'),
+                    data = {
+                        product_id: product_id,
+                        type: type,
+                        nonce: noubready_theme_params.ajax_nonce,
+                        action: 'bready_helpers_remove_product_from_lists'
+                    };
+                $.ajax({
+                    type: 'POST',
+                    data: data,
+                    url: noubready_theme_params.ajax_url,
+                    success: function(data) {
+                        product.remove();
+                    }
+                });
+            }
+            if ($(button).data('product_id')) {
+                var product = $(button).closest('.product'),
+				product_id = $(button).data('product_id'),
+				data2 = {
+                    action: 'bready_helpers_product_after_added_to_cart',
+                    nonce: noubready_theme_params.ajax_nonce,
+                    product_id: product_id
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: noubready_theme_params.ajax_url,
+                    data: data2
+                }).done(function(data){
+					if(data.status == 1){
+						$('#add-to-cart-modal .ps-product-modal').html(data.html);
+						inputNumberChange();
+						$.magnificPopup.open(
+							{
+								items: {
+									src: '#add-to-cart-modal'
+								},
+								type: 'inline',
+								modal: true
+							},
+							0
+						);
+					}
+                });
+            }
+        });
+    };
+	var load_more_products = function() {
+        var nextpage = 2;
+
+        $('.ps-loadmore').on('click', 'a', function() {
+            var btn = $(this),
+                maxpage = $(this).data('maxpage'),
+                maxposts = $(this).data('posts');
+
+            if (nextpage <= maxpage) {
+                btn.html(
+                    '<i class="fa fa-spin fa-spinner" aria-hidden="true"></i> ' +
+                        noubready_theme_params.load_more_text
+                );
+
+                var data = {
+                    page: nextpage,
+                    nonce: noubready_theme_params.ajax_nonce,
+                    action: 'noubready_load_more_products'
+                };
+                $.ajax({
+                    type: 'POST',
+                    data: data,
+                    url: noubready_theme_params.ajax_url,
+                    success: function(data) {
+                        nextpage++;
+                        btn.text(noubready_theme_params.load_more_text);
+                        if (data.status == '1') {
+                            $('.ps-row.products').append(data.html);
+                            rating();
+                            $('.ps-main .ps-content')
+                                .matchHeight('remove')
+                                .matchHeight();
+                        }
+                    }
+                });
+            } else {
+                btn.text(noubready_theme_params.no_more_products);
+            }
+
+            return false;
+        });
+    };
+	function quick_order(){
+        $('#product_quick_order').on('click', '.ps-btn', function(){
+            var $this = $(this),
+            form = $(this).closest('form'),
+            name = form.find('input[name="name"]').val(),
+            email = form.find('input[name="email"]').val(),
+            address = form.find('input[name="address"]').val(),
+            date = form.find('input[name="date"]').val(),
+            datetime = form.find('input[name="datetime"]').val(),
+            phone = form.find('input[name="phone"]').val(),
+            name_bakery = form.find('input[name="name_bakery"]').val(),
+            product_id = form.find('input[name="product_id"]').val(),
+            product_qty = form.find('input[name="qty"]').val(),
+            note = form.find('textarea[name="note"]').val(),
+            submit = true;
+
+            if(name == '' || email == '' || address == '' || phone == '' || date == '' || datetime == ''){
+                form.find('.form-control').each(function() {
+                    var val = $(this).val();
+                    if (val == '') {
+                        $(this)
+                            .closest('.form-group')
+                            .addClass('has-error');
+                    } else {
+                        $(this)
+                            .closest('.form-group')
+                            .removeClass('has-error');
+                    }
+                });
+                submit = false;
+                noty('error', noubready_theme_params.required_text);
+                return false;
+            }
+
+            if(!is_email(email)){
+                noty('error', noubready_theme_params.email_invalid_text);
+                submit = false;
+                return false;
+            }
+
+            if(submit == false){
+                noty('error', noubready_theme_params.required_text);
+                return false;   
+            }
+
+
+            var data = {
+                action: 'bready_helpers_quick_order',
+                nonce:  noubready_theme_params.ajax_nonce,
+                name: name,
+                phone: phone,
+                email: email,
+                note: note,
+                address: address,
+                date: date,
+                datetime: datetime,
+                name_bakery: name_bakery,
+                product_id: product_id,
+                product_qty: product_qty,
+            };
+
+            $.ajax({
+                type:    'POST',
+                url:     noubready_theme_params.ajax_url,
+                data:    data,
+                beforeSend: function(){
+                    $this.html(noubready_theme_params.btn_quick_order_text + ' <i class="fa fa-spin fa-spinner" aria-hidden="true"></i>');
+                },
+                success: function( data ) {
+                    $this.html(noubready_theme_params.btn_quick_order_text + ' <i class="fa fa-check" aria-hidden="true"></i>');
+                    if (data.status == 1) {
+						noty(
+							'success',
+							noubready_theme_params.quick_order_success_text
+						);
+					} else {
+						noty(
+							'error',
+							noubready_theme_params.quick_order_fail_text
+						);
+					}
+                }
+            });
+
+            return false;
+        });
+    }
+	function dateTimePicker() {
+        $('.date-picker').datetimepicker({format: noubready_theme_params.date_time_format});
+        $('.time-picker').datetimepicker({format: noubready_theme_params.date_time_format});
+    }
+	function search_header() {
+		$('.ps-searchbox__morelink').on('click', function(){
+			$('#search_header').submit();
+			return false;
+		});
+		$('.search_header_product').on('input', 'input[name="s"]', function(){
+			var val = $(this).val();
+			if(val.length > 2){
+				var data = {
+					key: val,
+					nonce: noubready_theme_params.ajax_nonce,
+					action: 'bready_helpers_search_products',
+				  };
+				$.ajax({
+					type       : "POST",
+					data       : data,
+					url        : noubready_theme_params.ajax_url,
+					beforeSend: function(){
+						$('#search_header button').html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
+					},
+					error     : function(jqXHR, textStatus, errorThrown) {
+						noty(
+							'error',
+							noubready_theme_params.not_found_posts
+						);
+					}
+
+				}).done(function(data){
+					$('#search_header button').html('<i class="ba-magnifying-glass"></i>');
+					if(data.status == '1'){
+					   $('.ps-searchbox__result').html(data.html);
+					   $('.ps-searchbox__result').show(); 
+					   if(data.count > 4){
+						$('.ps-searchbox__morelink').show(); 
+						}else{
+							$('.ps-searchbox__morelink').hide(); 
+						}
+					   if(data.count == 0){
+							$('.ps-searchbox__result').html('<p>'+ noubready_theme_params.not_found_posts +'</p>');
+							$('.ps-searchbox__result p').css('color', '#FFF');
+						}
+
+					}
+				});
+			}
+		});
+	}
+	function searchToggle() {
+        var open = $('.ps-search-btn'),
+            close = $('.ps-searchbox__remove'),
+            body = $('body'),
+            searchbox = $('.ps-searchbox');
+        open.on('click', function(e) {
+            e.preventDefault();
+            searchbox.addClass('active');
+            body.css({
+                overflow: 'hidden'
+            });
+        });
+        close.on('click', function(e) {
+            e.preventDefault();
+            searchbox.removeClass('active');
+            body.css({
+                overflow: 'auto'
+            });
+        });
+    }
+    $(function() {
+		found_variation();
+        share_post();
+        post_like();
+        product_wishlist();
+        product_compare();
+		inputNumberChange();
+        remove_cart_header();
+        magnificPopup();
+        share_product();
+        is_email();
+        contact();
+		get_in_touch();
+		delivery();
+        newsletter();
+		newsletter_footer();
+        custom_content();
+		mapConfig();
+		product_added_to_cart();
+		load_more_products();
+		quick_order();
+		dateTimePicker();
+		search_header();
+		searchToggle();
+		
+    });
+	$(window).on('load', function() {
+        $(".menu--mobile .menu-item-has-children").append('<span class="sub-toggle"><i class="fa fa-angle-down"></i></span>');
+    });	
+	
+})(jQuery);
